@@ -8,10 +8,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
 </head>
 <body>
-    <button class="save-button" onclick="viewSavedTransactions()">HOME</button>
+    <button class="save-button"><a href="/" style="text-decoration: none; color: antiquewhite;">HOME</a></button>
     <div class="container" id="transactionsContainer">
         <h2>Saved Transactions</h2>
         <input type="search" id="searchInput" placeholder="Search by Recipient" oninput="filterTransactions()">
+        
+        <label for="sortCriteria" style="margin-bottom: 10px;">Sort By:</label>
+        <select id="sortCriteria" onchange="sortTransactions()">
+            <option value="" disabled selected>Select criteria</option>
+            <option value="amount">Amount</option>
+            <option value="date">Date</option>
+        </select>
+
         <table id="transactionsTable">
             <thead>
                 <tr>
@@ -33,9 +41,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderTransactions();
         });
-        function viewSavedTransactions() {
-            window.location.href = 'index.html';
-        }
+
         function renderTransactions() {
             const tbody = document.querySelector('#transactionsTable tbody');
             const storedTransactions = JSON.parse(localStorage.getItem('transactions'));
@@ -66,6 +72,20 @@
             } else {
                 tbody.innerHTML = '<tr><td colspan="6">No transactions saved.</td></tr>';
             }
+        }
+
+        function sortTransactions() {
+            const criteria = document.getElementById('sortCriteria').value;
+            let storedTransactions = JSON.parse(localStorage.getItem('transactions'));
+
+            if (criteria === 'amount') {
+                storedTransactions.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount));
+            } else if (criteria === 'date') {
+                storedTransactions.sort((a, b) => new Date(a.transactionDate) - new Date(b.transactionDate));
+            }
+
+            localStorage.setItem('transactions', JSON.stringify(storedTransactions));
+            renderTransactions();
         }
 
         function deleteTransaction(index) {
