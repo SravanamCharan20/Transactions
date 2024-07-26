@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <button class="save-button" onclick="viewSavedTransactions()">My Transactions</button>
+    <div class="container">
+        <h2>Enter Your Transaction</h2>
+        <input type="text" id="moneySentTo" placeholder="Money Sent To" required>
+        <input type="text" id="transactionId" placeholder="Transaction ID" required>
+        <input type="number" id="amount" placeholder="Amount" required>
+        <input type="date" id="transactionDate" placeholder="Transaction Date" required>
+        <select id="status" required>
+            <option value="" disabled selected>Paid/Received</option>
+            <option value="Paid">Paid</option>
+            <option value="Received">Received</option>
+        </select>
+        <button class="submit-button" onclick="saveTransaction()">Submit</button>
+    </div>
+
+    <script>
+        function saveTransaction() {
+            const moneySentTo = document.getElementById('moneySentTo').value;
+            const transactionId = document.getElementById('transactionId').value;
+            const amount = document.getElementById('amount').value;
+            const transactionDate = document.getElementById('transactionDate').value;
+            const status = document.getElementById('status').value;
+
+            if (moneySentTo && transactionId && amount && transactionDate && status) {
+                const transaction = {
+                    moneySentTo: moneySentTo,
+                    transactionId: transactionId,
+                    amount: amount,
+                    transactionDate: transactionDate,
+                    status: status
+                };
+
+                let storedTransactions = localStorage.getItem('transactions');
+                if (storedTransactions) {
+                    storedTransactions = JSON.parse(storedTransactions);
+                } else {
+                    storedTransactions = [];
+                }
+                storedTransactions.push(transaction);
+                localStorage.setItem('transactions', JSON.stringify(storedTransactions));
+                alert('Transaction saved successfully');
+                document.getElementById('moneySentTo').value = '';
+                document.getElementById('transactionId').value = '';
+                document.getElementById('amount').value = '';
+                document.getElementById('transactionDate').value = '';
+                document.getElementById('status').value = '';
+            } else {
+                alert('Please fill out all fields');
+            }
+        }
+
+        function viewSavedTransactions() {
+            window.location.href = 'mytransactions.html';
+        }
+    </script>
+</body>
+</html>
