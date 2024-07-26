@@ -29,6 +29,7 @@
                     <th>Date</th>
                     <th>Status</th>
                     <th>Actions</th>
+                    <th>Purpose</th> <!-- Add this line -->
                 </tr>
             </thead>
             <tbody>
@@ -49,7 +50,26 @@
 
             // Clear existing rows
             tbody.innerHTML = '';
-
+            storedTransactions.forEach((trans, index) => {
+                if (trans.moneySentTo.toLowerCase().includes(searchInput)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${trans.moneySentTo}</td>
+                        <td>${trans.transactionId}</td>
+                        <td>${trans.amount}</td>
+                        <td>${trans.transactionDate}</td>
+                        <td>${trans.status}</td>
+                        
+                        <td>
+                            <button class="btn btn-update" onclick="updateTransaction(${index})">Update</button>
+                            <button class="btn btn-delete" onclick="deleteTransaction(${index})">Delete</button>
+                        </td>
+                        <td>${trans.transactionPurpose}</td> <!-- Add this line -->
+                    `;
+                    tbody.appendChild(row);
+                    animateRow(row, index);
+                }
+            });
             if (storedTransactions && storedTransactions.length > 0) {
                 storedTransactions.forEach((trans, index) => {
                     if (trans.moneySentTo.toLowerCase().includes(searchInput)) {
