@@ -9,7 +9,7 @@
 </head>
 <body>
     <button class="save-button"><a href="/" style="text-decoration: none; color: antiquewhite;">HOME</a></button>
-    <div class="container" id="transactionsContainer">
+    <div id="transactionsContainer">
         <h2>Saved Transactions</h2>
         <input type="search" id="searchInput" placeholder="Search by Recipient" oninput="filterTransactions()">
         
@@ -50,26 +50,6 @@
 
             // Clear existing rows
             tbody.innerHTML = '';
-            storedTransactions.forEach((trans, index) => {
-                if (trans.moneySentTo.toLowerCase().includes(searchInput)) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${trans.moneySentTo}</td>
-                        <td>${trans.transactionId}</td>
-                        <td>${trans.amount}</td>
-                        <td>${trans.transactionDate}</td>
-                        <td>${trans.status}</td>
-                        
-                        <td>
-                            <button class="btn btn-update" onclick="updateTransaction(${index})">Update</button>
-                            <button class="btn btn-delete" onclick="deleteTransaction(${index})">Delete</button>
-                        </td>
-                        <td>${trans.transactionPurpose}</td> <!-- Add this line -->
-                    `;
-                    tbody.appendChild(row);
-                    animateRow(row, index);
-                }
-            });
             if (storedTransactions && storedTransactions.length > 0) {
                 storedTransactions.forEach((trans, index) => {
                     if (trans.moneySentTo.toLowerCase().includes(searchInput)) {
@@ -84,6 +64,7 @@
                                 <button class="btn btn-update" onclick="updateTransaction(${index})">Update</button>
                                 <button class="btn btn-delete" onclick="deleteTransaction(${index})">Delete</button>
                             </td>
+                            <td>${trans.transactionPurpose}</td> <!-- Add this line -->
                         `;
                         tbody.appendChild(row);
                         animateRow(row, index);
